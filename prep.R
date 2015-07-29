@@ -51,6 +51,10 @@ selected <- subset(PEF.plots.long.sort, PEF.plots.long.sort$MU %in% c("10", " 7B
 p <- ggplot(data = selected, aes(x = height, y = energy, group = id, colour = MU))
 p + geom_line()
 
+##Plot of all curves
+p <- ggplot(data = PEF.plots.long.sort, aes(x = height, y = energy, group = id, colour = MU))
+p + geom_line()
+
 coords <- PEF.plots[,c("x.coords", "y.coords")]
 stems.ha <- PEF.plots$stems.ha
 

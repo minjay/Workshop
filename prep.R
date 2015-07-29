@@ -71,3 +71,10 @@ surf <- as.image.SpatialGridDataFrame(surf[PEF.shp,])
 image.plot(surf, xaxs = "r", yaxs = "r", xlab="Easting (m)", ylab="Northing (m)", main="Trees per ha")
 plot(PEF.shp, add=TRUE)
 
+##PCA using prcomp
+pca.test<-prcomp(LVIS, scale = T)
+summary(pca.test)
+biplot(pca.test)
+plot(pca.test)
+pc.score <- predict(pca.test)[1:451,1:2]
+PEF.data <- cbind(PEF.plots[,1:7],pc.score)

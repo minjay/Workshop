@@ -28,13 +28,13 @@ y1 <- PEF.plots$biomass.mg.ha
 y2 <- log(PEF.plots$stems.ha)
 y3 <- PEF.plots$basal.area.m2.ha
 r <- min(which(var.exp>=0.95))
-lm.data <- data.frame(cbind(y2, T[1:n.ref, 1:r]))
-lm.obj <- lm(y2~., data = lm.data)
+lm.data <- data.frame(cbind(y3, T[1:n.ref, 1:r]))
+lm.obj <- lm(y3~., data = lm.data)
 summary(lm.obj)
-lm.data <- data.frame(cbind(y, T[1:n.ref, 1:6]))
-lm.obj <- lm(y~., data = lm.data)
+lm.data <- data.frame(cbind(y3, T[1:n.ref, 1:6]))
+lm.obj <- lm(y3~., data = lm.data)
 summary(lm.obj)
-lm.obj <- lm(sqrt(y)~V2+V3+V4+V6+V7, data = lm.data)
+lm.obj <- lm(y3~V2+V3+V4+V6+V7, data = lm.data)
 summary(lm.obj)
 
 ggplot(data = PEF.plots, aes(x = x.coords, y = y.coords, label = MU)) +

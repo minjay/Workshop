@@ -53,10 +53,13 @@ m.1 <- spLM(y3~T.ref[, 1]+T.ref[, 2], coords=PEF.coords, starting=starting,
             tuning=tuning, priors=priors.1, cov.model=cov.model,
             n.samples=n.samples, verbose=verbose, n.report=n.report)
 
+plot(m.1$p.theta.samples)
+
 burn.in <- 0.5*n.samples
 m.1 <- spRecover(m.1, start=burn.in, verbose=FALSE)
-coords <- cbind(PEF.LVIS[, 1], PEF.LVIS[, 2])
-m.1.pred <- spPredict(m.1, pred.covars=cbind(rep(1, dim(PEF.LVIS)[1]), T[-c(1:n.ref), 1:2]), pred.coords=coords,
+
+
+m.1.pred <- spPredict(m.1, pred.covars = as.matrix(cbind(rep(1, nrow(PEF.predict)), PEF.predict[,3:4])), pred.coords = Lid.coords,
                       start=0.5*n.samples)
 y.hat <- apply(m.1.pred$p.y.predictive.samples, 1, mean)
 

@@ -26,15 +26,16 @@ plot(pca.test)
 pc.score <- predict(pca.test)[1:451,1:2]
 PEF.data <- cbind(PEF.plots[,1:7],pc.score)
 PEF.predict <- cbind(PEF.LVIS[,1:2], predict(pca.test)[452:12865,1:2])
-coords <- PEF.data[,3:4]
+PEF.coords <- PEF.data[,3:4]
+Lid.coords <- as.matrix(PEF.LVIS[,1:2])
 
 lm1 <- lm(biomass.mg.ha ~ PC1 + PC2, data = PEF.data)
-vg1 <- variog(coords = coords, data = resid(lm1))
+vg1 <- variog(coords = PEF.coords, data = resid(lm1))
 plot(vg1)
 spline.obj <- spline(vg1$u, vg1$v, xmin=0, xmax=max(vg1$u))
 lines(spline.obj$x, spline.obj$y, col="red")
 
-max.dist <- max(iDist(coords))
+max.dist <- max(iDist(PEF.coords))
 
 starting <- list("phi" = 3/1000, "sigma.sq" = 1, "tau.sq" = 1)
 tuning <- list("phi" = 0.1, "sigma.sq" = 0.1, "tau.sq" = 0.1)
@@ -48,7 +49,7 @@ n.samples = 2000
 n.report = 500
 verbose = TRUE
 
-m.1 <- spLM(y3~T.ref[, 1]+T.ref[, 2], coords=coords, starting=starting,
+m.1 <- spLM(y3~T.ref[, 1]+T.ref[, 2], coords=PEF.coords, starting=starting,
             tuning=tuning, priors=priors.1, cov.model=cov.model,
             n.samples=n.samples, verbose=verbose, n.report=n.report)
 

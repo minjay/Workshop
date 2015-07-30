@@ -30,7 +30,32 @@ lm1 <- lm(biomass.mg.ha ~ PC1 + PC2, data = PEF.data)
 vg1 <- variog(coords = PEF.data[,1:2], data = resid(lm1))
 plot(vg1)
 
+coords <- cbind(PEF.plots$x.coords, PEF.plots$y.coords)
+D <- as.matrix(dist(coords))
+starting <- list("phi" = 3/1000, "sigma.sq" = 1, "tau.sq" = 1)
+tuning <- list("phi" = 0.1, "sigma.sq" = 0.1, "tau.sq" = 0.1)
+priors.1 <- list("beta.Norm"=list(rep(0,3), diag(1000,3)),
+                 "phi.Unif"=c(3/3000, 3/1), "sigma.sq.IG"=c(2, 2),
+                 "tau.sq.IG"=c(2, 0.1))
 
+cov.model <- "exponential"
+
+n.samples = 2000
+n.report = 500
+verbose = TRUE
+
+m.1 <- spLM(y3~T.ref[, 1]+T.ref[, 2], coords=coords, starting=starting,
+            tuning=tuning, priors=priors.1, cov.model=cov.model,
+            n.samples=n.samples, verbose=verbose, n.report=n.report)
+
+burn.in <- 0.5*n.samples
+m.1 <- spRecover(m.1, start=burn.in, verbose=FALSE)
+coords <- cbind(PEF.LVIS[, 1], PEF.LVIS[, 2])
+m.1.pred <- spPredict(m.1, pred.covars=cbind(rep(1, dim(PEF.LVIS)[1]), T[-c(1:n.ref), 1:2]), pred.coords=coords,
+                      start=0.5*n.samples)
+y.hat <- apply(m.1.pred$p.y.predictive.samples, 1, mean)
+
+quilt.plot(coords, y.hat)
 
 
 

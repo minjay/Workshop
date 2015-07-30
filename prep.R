@@ -66,6 +66,21 @@ y.hat <- apply(m.1.pred$p.y.predictive.samples, 1, mean)
 quilt.plot(coords, y.hat)
 
 
+round(summary(m.1$p.theta.recover.samples)$quantiles[,c(3,1,5)],2)
+
+round(summary(m.1$p.beta.recover.samples)$quantiles[,c(3,1,5)],2) #regression coeffs
+
+quants <- function(x){quantile(x, prob=c(0.5,0.025,0.975))}
+
+w.summary <- apply(m.1$p.w.recover.samples, 1, quants)
+
+##posterior median surface
+par(mfrow=c(1,2))
+quilt.plot(x[,1], x[,2], w.summary[1,])
+
+w.mu.surf <- mba.surf(cbind(x, w.summary[1,]), no.X=200, no.Y=200, extend=TRUE)$xyz.est
+image.plot(w.mu.surf)
+
 
 
 

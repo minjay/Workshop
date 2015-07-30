@@ -31,7 +31,8 @@ coords <- PEF.data[,3:4]
 lm1 <- lm(biomass.mg.ha ~ PC1 + PC2, data = PEF.data)
 vg1 <- variog(coords = coords, data = resid(lm1))
 plot(vg1)
-
+spline.obj <- spline(vg1$u, vg1$v, xmin=0, xmax=max(vg1$u))
+plot(spline.obj$x, spline.obj$y)
 
 max.dist <- max(iDist(coords))
 

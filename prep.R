@@ -25,7 +25,7 @@ biplot(pca.test)
 plot(pca.test)
 pc.score <- predict(pca.test)[1:451,1:2]
 PEF.data <- cbind(PEF.plots[,1:7],pc.score)
-
+PEF.predict <- cbind(PEF.LVIS[,1:2], predict(pca.test)[452:12865,1:2])
 coords <- PEF.data[,3:4]
 
 lm1 <- lm(biomass.mg.ha ~ PC1 + PC2, data = PEF.data)

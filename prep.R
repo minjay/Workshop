@@ -36,12 +36,12 @@ PEF.coords <- as.matrix(PEF.data[,3:4])
 Lid.coords <- as.matrix(PEF.LVIS[,1:2])
 
 lm1 <- lm(biomass.mg.ha ~ PC1 + PC2, data = PEF.data)
-vg1 <- variog(coords = coords, data = resid(lm1))
+vg1 <- variog(coords = PEF.coords, data = resid(lm1))
 plot(vg1)
 spline.obj <- spline(vg1$u, vg1$v, xmin=0, xmax=max(vg1$u))
 lines(spline.obj$x, spline.obj$y)
 
-D.max <- max(iDist(coords))
+D.max <- max(iDist(PEF.coords))
 
 
 starting <- list("phi" = 3/(0.5*D.max), "sigma.sq" = 700, "tau.sq" = 500)
@@ -56,7 +56,7 @@ n.samples = 2000
 n.report = 500
 verbose = TRUE
 
-m.1 <- spLM(biomass.mg.ha ~ PC1 + PC2, data = PEF.data, coords = coords, starting=starting,
+m.1 <- spLM(biomass.mg.ha ~ PC1 + PC2, data = PEF.data, coords = PEF.coords, starting=starting,
             tuning = tuning, priors = priors.1, cov.model = cov.model,
             n.samples=n.samples, verbose=verbose, n.report=n.report)
 

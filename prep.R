@@ -33,7 +33,8 @@ vg1 <- variog(coords = coords, data = resid(lm1))
 plot(vg1)
 
 
-D <- as.matrix(dist(coords))
+max.dist <- max(iDist(coords))
+
 starting <- list("phi" = 3/1000, "sigma.sq" = 1, "tau.sq" = 1)
 tuning <- list("phi" = 0.1, "sigma.sq" = 0.1, "tau.sq" = 0.1)
 priors.1 <- list("beta.Norm"=list(rep(0,3), diag(1000,3)),

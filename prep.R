@@ -5,6 +5,7 @@ library(fields)
 library(rgdal)
 library(ggplot2)
 library(spBayes)
+library(geoR)
 
 PEF.shp <- readOGR("shapefiles","PEF-bounds")
 

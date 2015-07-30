@@ -15,27 +15,15 @@ n.dist <- 151
 
 PEF.LVIS <- read.csv("PEF-LVIS.csv")
 
-LVIS <- rbind(as.matrix(PEF.plots[, 8:158]), as.matrix(PEF.LVIS[, 3:153]))
+LVIS <- rbind(as.matrix(PEF.plots[, 37:158]), as.matrix(PEF.z[, 32:153]))
 
-# PCA
-LVIS = scale(LVIS, center = TRUE)
-s <- svd(LVIS)
-var.exp <- cumsum(s$d^2/sum(s$d^2))
-V <- s$v
-T <- LVIS%*%V
-# need to do variable selection
-y1 <- PEF.plots$biomass.mg.ha
-y2 <- log(PEF.plots$stems.ha)
-y3 <- PEF.plots$basal.area.m2.ha
-r <- min(which(var.exp>=0.95))
-lm.data <- data.frame(cbind(y3, T[1:n.ref, 1:r]))
-lm.obj <- lm(y3~., data = lm.data)
-summary(lm.obj)
-lm.data <- data.frame(cbind(y3, T[1:n.ref, 1:6]))
-lm.obj <- lm(y3~., data = lm.data)
-summary(lm.obj)
-lm.obj <- lm(y3~V2+V3+V4+V6+V7, data = lm.data)
-summary(lm.obj)
+##PCA using prcomp
+pca.test<-prcomp(LVIS, scale = T)
+summary(pca.test)
+biplot(pca.test)
+plot(pca.test)
+pc.score <- predict(pca.test)[1:451,1:2]
+PEF.data <- cbind(PEF.plots[,1:7],pc.score)
 
 ggplot(data = PEF.plots, aes(x = x.coords, y = y.coords, label = MU)) +
   geom_point() + geom_text(aes(label = MU), hjust=0, vjust=0)
@@ -71,10 +59,4 @@ surf <- as.image.SpatialGridDataFrame(surf[PEF.shp,])
 image.plot(surf, xaxs = "r", yaxs = "r", xlab="Easting (m)", ylab="Northing (m)", main="Trees per ha")
 plot(PEF.shp, add=TRUE)
 
-##PCA using prcomp
-pca.test<-prcomp(LVIS, scale = T)
-summary(pca.test)
-biplot(pca.test)
-plot(pca.test)
-pc.score <- predict(pca.test)[1:451,1:2]
-PEF.data <- cbind(PEF.plots[,1:7],pc.score)
+

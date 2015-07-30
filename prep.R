@@ -15,7 +15,7 @@ n.dist <- 151
 
 PEF.LVIS <- read.csv("PEF-LVIS.csv")
 
-LVIS <- rbind(as.matrix(PEF.plots[, 37:158]), as.matrix(PEF.z[, 32:153]))
+LVIS <- rbind(as.matrix(PEF.plots[, 37:158]), as.matrix(PEF.LVIS[, 32:153]))
 
 ##PCA using prcomp
 pca.test<-prcomp(LVIS, scale = T)
@@ -24,6 +24,19 @@ biplot(pca.test)
 plot(pca.test)
 pc.score <- predict(pca.test)[1:451,1:2]
 PEF.data <- cbind(PEF.plots[,1:7],pc.score)
+
+
+lm1 <- lm(biomass.mg.ha ~ PC1 + PC2, data = PEF.data)
+vg1 <- variog(coords = PEF.data[,1:2], data = resid(lm1))
+plot(vg1)
+
+
+
+
+
+
+
+
 
 ggplot(data = PEF.plots, aes(x = x.coords, y = y.coords, label = MU)) +
   geom_point() + geom_text(aes(label = MU), hjust=0, vjust=0)

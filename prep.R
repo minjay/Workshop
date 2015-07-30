@@ -25,12 +25,13 @@ plot(pca.test)
 pc.score <- predict(pca.test)[1:451,1:2]
 PEF.data <- cbind(PEF.plots[,1:7],pc.score)
 
+coords <- PEF.data[,3:4]
 
 lm1 <- lm(biomass.mg.ha ~ PC1 + PC2, data = PEF.data)
-vg1 <- variog(coords = PEF.data[,1:2], data = resid(lm1))
+vg1 <- variog(coords = coords, data = resid(lm1))
 plot(vg1)
 
-coords <- cbind(PEF.data[, 3], PEF.data[, 4)
+
 D <- as.matrix(dist(coords))
 starting <- list("phi" = 3/1000, "sigma.sq" = 1, "tau.sq" = 1)
 tuning <- list("phi" = 0.1, "sigma.sq" = 0.1, "tau.sq" = 0.1)
